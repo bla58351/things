@@ -1,0 +1,31 @@
+node_modules
+npm-debug.log
+.git
+.gitignore
+.env
+.env.local
+.DS_Store
+*.log
+
+# Client
+client/node_modules
+client/dist
+client/.vite
+
+# Server
+server/node_modules
+server/dist
+
+# Data
+data/*
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# CI/CD
+.github
+.claude
+.trae

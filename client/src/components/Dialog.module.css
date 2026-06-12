@@ -1,0 +1,17 @@
+.dialog {
+  max-width: 400px;
+}
+
+.message {
+  font-size: 15px;
+  color: #374151;
+  line-height: 1.6;
+  margin-bottom: 24px;
+  white-space: pre-wrap;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}

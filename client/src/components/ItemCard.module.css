@@ -1,0 +1,95 @@
+.card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.card:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.12);
+  transform: translateY(-1px);
+}
+
+.cardSelected {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+
+.checkbox {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+}
+
+.cardTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 8px;
+}
+
+.cardMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.cardCategory {
+  font-size: 12px;
+  padding: 2px 8px;
+  background: #f3f4f6;
+  border-radius: 4px;
+  color: #6b7280;
+}
+
+.cardTag {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  color: #fff;
+}
+
+.cardLocation {
+  font-size: 13px;
+  color: #6b7280;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cardQuantity {
+  font-size: 12px;
+  color: #9ca3af;
+  margin-top: 4px;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .cardGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.empty {
+  text-align: center;
+  color: #9ca3af;
+  padding: 48px 24px;
+  font-size: 15px;
+}
+
+.emptyIcon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}

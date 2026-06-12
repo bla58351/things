@@ -1,0 +1,23 @@
+services:
+  things:
+    image: ghcr.io/YOUR_USERNAME/things:latest
+    container_name: things
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    volumes:
+      # 持久化数据存储
+      - ./data:/app/data
+    environment:
+      # 服务端口（默认 3001）
+      - PORT=3001
+      # Node 环境
+      - NODE_ENV=production
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3001/api/items', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    labels:
+      - "com.docker.compose.project=things"

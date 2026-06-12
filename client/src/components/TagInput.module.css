@@ -1,0 +1,103 @@
+.tagInput {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  min-height: 32px;
+  padding: 4px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  cursor: text;
+}
+
+.tagInput:focus-within {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  color: #fff;
+  font-weight: 500;
+}
+
+.tagRemove {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 14px;
+  opacity: 0.7;
+  padding: 0;
+  line-height: 1;
+}
+
+.tagRemove:hover {
+  opacity: 1;
+}
+
+.tagInputField {
+  border: none;
+  outline: none;
+  font-size: 13px;
+  min-width: 80px;
+  flex: 1;
+  padding: 2px 0;
+}
+
+.tagDropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  margin-top: 4px;
+  max-height: 160px;
+  overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+}
+
+.tagDropdownItem {
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tagDropdownItem:hover {
+  background: #f3f4f6;
+}
+
+.tagDropdownCreate {
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  color: #3b82f6;
+  border-top: 1px solid #f3f4f6;
+}
+
+.tagDropdownCreate:hover {
+  background: #eff6ff;
+}
+
+.tagDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.tagWrapper {
+  position: relative;
+}

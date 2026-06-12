@@ -1,0 +1,199 @@
+.tree {
+  background: #fff;
+  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .tree {
+    max-height: 400px;
+  }
+}
+
+.sidebarTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.batchPrintBtn {
+  background: none;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.batchPrintBtn:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.treeNode {
+  user-select: none;
+}
+
+.nodeLabel {
+  display: flex;
+  align-items: center;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s;
+  gap: 6px;
+}
+
+.nodeLabel:hover {
+  background: #f3f4f6;
+}
+
+.nodeLabelActive {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.nodeToggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 10px;
+  width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.nodeDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.nodeName {
+  font-size: 14px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nodeActions {
+  display: flex;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.nodeLabel:hover .nodeActions {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .nodeActions {
+    opacity: 1; /* 移动端始终显示操作按钮 */
+  }
+}
+
+.nodeActionBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  color: #9ca3af;
+}
+
+.nodeActionBtn:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.children {
+  padding-left: 20px;
+}
+
+.addRootBtn {
+  display: block;
+  width: 100%;
+  padding: 6px;
+  margin-top: 8px;
+  background: none;
+  border: 1px dashed #d1d5db;
+  border-radius: 6px;
+  color: #9ca3af;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.15s;
+}
+
+.addRootBtn:hover {
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.inlineForm {
+  display: flex;
+  gap: 4px;
+  padding: 2px 0;
+}
+
+.inlineInput {
+  flex: 1;
+  padding: 4px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 13px;
+  outline: none;
+}
+
+.inlineInput:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+}
+
+.inlineConfirm {
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.inlineCancel {
+  background: #e5e7eb;
+  color: #374151;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.noData {
+  color: #9ca3af;
+  font-size: 13px;
+  text-align: center;
+  padding: 16px;
+}

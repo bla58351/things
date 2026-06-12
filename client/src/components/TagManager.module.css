@@ -1,0 +1,188 @@
+.tagManager {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #fff;
+  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 4px;
+}
+
+.title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.addBtn {
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 4px;
+  background: #f3f4f6;
+  color: #6b7280;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.addBtn:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.tagList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tagItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-size: 14px;
+  color: #374151;
+}
+
+.tagItem:hover {
+  background: #f3f4f6;
+}
+
+.tagItemActive {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.tagItemActive:hover {
+  background: #dbeafe;
+}
+
+.tagDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.tagName {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tagActions {
+  display: none;
+  gap: 4px;
+}
+
+.tagItem:hover .tagActions {
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .tagActions {
+    display: flex; /* 移动端始终显示操作按钮 */
+  }
+}
+
+.tagActionBtn {
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: #9ca3af;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.tagActionBtn:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.addForm,
+.editForm {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 0 4px;
+}
+
+.input {
+  flex: 1;
+  padding: 4px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 13px;
+  outline: none;
+  min-width: 0;
+}
+
+.input:focus {
+  border-color: #3b82f6;
+}
+
+.confirmBtn {
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 4px;
+  background: #3b82f6;
+  color: #fff;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirmBtn:hover {
+  background: #2563eb;
+}
+
+.cancelBtn {
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 4px;
+  background: #f3f4f6;
+  color: #6b7280;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cancelBtn:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.empty {
+  padding: 16px;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 13px;
+}

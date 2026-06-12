@@ -1,0 +1,146 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.input {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  width: 100%;
+}
+
+.input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+}
+
+@media (max-width: 768px) {
+  .input {
+    font-size: 16px; /* 防止 iOS 自动缩放 */
+  }
+}
+
+.textarea {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  resize: vertical;
+  min-height: 60px;
+}
+
+.textarea:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+}
+
+@media (max-width: 768px) {
+  .textarea {
+    font-size: 16px; /* 防止 iOS 自动缩放 */
+  }
+}
+
+.select {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  background: #fff;
+}
+
+.select:focus {
+  border-color: #3b82f6;
+}
+
+@media (max-width: 768px) {
+  .select {
+    font-size: 16px; /* 防止 iOS 自动缩放 */
+  }
+}
+
+.locationPicker {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  color: #374151;
+  transition: border-color 0.2s;
+}
+
+.locationPicker:hover {
+  border-color: #3b82f6;
+}
+
+.formActions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.locationPickerModal {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.locationOption {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.15s;
+  font-size: 14px;
+}
+
+.locationOption:hover {
+  background: #f3f4f6;
+}
+
+.locationOptionActive {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.locationOptionChildren {
+  padding-left: 24px;
+}
+
+.formRow {
+  display: flex;
+  gap: 12px;
+}
+
+.formRow .field {
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .formRow {
+    flex-direction: column;
+    gap: 16px;
+  }
+}

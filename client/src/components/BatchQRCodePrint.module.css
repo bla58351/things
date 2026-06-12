@@ -1,0 +1,66 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #6b7280;
+  padding: 4px;
+}
+
+.closeBtn:hover {
+  color: #374151;
+}
+
+.preview {
+  max-height: 60vh;
+  overflow-y: auto;
+  background: #f9fafb;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.qrItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.locationName {
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f2937;
+  text-align: center;
+  word-break: break-all;
+}
+
+.locationId {
+  margin-top: 4px;
+  font-size: 11px;
+  color: #6b7280;
+  font-family: monospace;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 16px;
+}

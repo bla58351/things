@@ -1,0 +1,149 @@
+.page {
+  display: flex;
+  gap: 24px;
+  min-height: calc(100vh - 104px);
+}
+
+.sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .page {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .sidebar {
+    width: 100%;
+    gap: 12px;
+  }
+}
+
+.sidebarSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebarTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+.contentHeader {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contentTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .contentTitle {
+    flex-wrap: wrap;
+  }
+}
+
+.contentTitleText {
+  font-size: 16px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.contentTitleCount {
+  font-size: 13px;
+  color: #9ca3af;
+  font-weight: normal;
+  margin-left: 8px;
+}
+
+.addBtn {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.addBtn:hover {
+  background: #2563eb;
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+}
+
+@media (max-width: 768px) {
+  .addBtn {
+    bottom: 20px;
+    right: 20px;
+    width: 52px;
+    height: 52px;
+    font-size: 24px;
+  }
+}
+
+.selectedLocation {
+  font-size: 13px;
+  color: #3b82f6;
+  background: #eff6ff;
+  padding: 4px 10px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  width: fit-content;
+}
+
+.selectedLocationClear {
+  background: none;
+  border: none;
+  color: #3b82f6;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  line-height: 1;
+  margin-left: 2px;
+}
+
+.itemGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .itemGrid {
+    grid-template-columns: 1fr;
+  }
+}
