@@ -55,6 +55,9 @@ COPY --from=client-builder /app/client/dist ./public
 # 创建数据目录
 RUN mkdir -p /app/data && chown -R nodejs:nodejs /app
 
+# 设置数据目录环境变量
+ENV DATA_DIR=/app/data
+
 # 切换到非 root 用户
 USER nodejs
 
