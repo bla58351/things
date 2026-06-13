@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { Item, Location, Tag, MoveRecord, Category } from './types';
 
-const DATA_DIR = path.resolve(__dirname, '../../data');
+const DATA_DIR = process.env.DATA_DIR || path.resolve(__dirname, '../../data');
 
 function readJSON<T>(filename: string): T[] {
   const filePath = path.join(DATA_DIR, filename);
