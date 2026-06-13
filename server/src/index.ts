@@ -5,6 +5,10 @@ import itemsRouter from './routes/items';
 import locationsRouter from './routes/locations';
 import tagsRouter from './routes/tags';
 import categoriesRouter from './routes/categories';
+import { initializeStore } from './store';
+
+// 初始化数据存储
+initializeStore();
 
 const app = express();
 const PORT = process.env.PORT || 3001;

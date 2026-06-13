@@ -18,6 +18,70 @@ function writeJSON<T>(filename: string, data: T[]): void {
   fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
 }
 
+// 初始化数据目录和默认数据
+export function initializeStore(): void {
+  // 确保数据目录存在
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+    console.log('Created data directory:', DATA_DIR);
+  }
+
+  const now = new Date().toISOString();
+
+  // 初始化 categories.json
+  const categoriesPath = path.join(DATA_DIR, 'categories.json');
+  if (!fs.existsSync(categoriesPath)) {
+    const defaultCategories: Category[] = [
+      { id: 'cat-1', name: '电子产品', createdAt: now },
+      { id: 'cat-2', name: '书籍', createdAt: now },
+      { id: 'cat-3', name: '工具', createdAt: now },
+      { id: 'cat-4', name: '衣物', createdAt: now },
+      { id: 'cat-5', name: '食品', createdAt: now },
+    ];
+    writeJSON('categories.json', defaultCategories);
+    console.log('Initialized categories with default data');
+  }
+
+  // 初始化 locations.json
+  const locationsPath = path.join(DATA_DIR, 'locations.json');
+  if (!fs.existsSync(locationsPath)) {
+    const defaultLocations: Location[] = [
+      { id: 'loc-1', name: '客厅', parentId: null, description: '客厅区域', color: '#3b82f6', createdAt: now },
+      { id: 'loc-2', name: '卧室', parentId: null, description: '卧室区域', color: '#8b5cf6', createdAt: now },
+      { id: 'loc-3', name: '书房', parentId: null, description: '书房区域', color: '#10b981', createdAt: now },
+      { id: 'loc-4', name: '储藏室', parentId: null, description: '储藏室', color: '#f59e0b', createdAt: now },
+    ];
+    writeJSON('locations.json', defaultLocations);
+    console.log('Initialized locations with default data');
+  }
+
+  // 初始化 tags.json
+  const tagsPath = path.join(DATA_DIR, 'tags.json');
+  if (!fs.existsSync(tagsPath)) {
+    const defaultTags: Tag[] = [
+      { id: 'tag-1', name: '常用', color: '#ef4444', createdAt: now },
+      { id: 'tag-2', name: '重要', color: '#f59e0b', createdAt: now },
+      { id: 'tag-3', name: '收藏', color: '#eab308', createdAt: now },
+    ];
+    writeJSON('tags.json', defaultTags);
+    console.log('Initialized tags with default data');
+  }
+
+  // 初始化 items.json
+  const itemsPath = path.join(DATA_DIR, 'items.json');
+  if (!fs.existsSync(itemsPath)) {
+    writeJSON('items.json', []);
+    console.log('Initialized items.json (empty)');
+  }
+
+  // 初始化 moveRecords.json
+  const recordsPath = path.join(DATA_DIR, 'moveRecords.json');
+  if (!fs.existsSync(recordsPath)) {
+    writeJSON('moveRecords.json', []);
+    console.log('Initialized moveRecords.json (empty)');
+  }
+}
+
 export function getAllItems(): Item[] {
   return readJSON<Item>('items.json');
 }
