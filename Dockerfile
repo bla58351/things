@@ -37,12 +37,8 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# 安装 dumb-init 用于正确处理信号
-RUN apk add --no-cache dumb-init
-
-# 创建非 root 用户
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nodejs -u 1001
+# 安装 dumb-init 和 su-exec 用于正确处理信号和权限
+RUN apk add --no-cache dumb-init su-exec
 
 # 复制服务端依赖文件并安装生产依赖
 COPY server/package*.json ./
@@ -52,14 +48,8 @@ RUN npm ci --only=production && npm cache clean --force
 COPY --from=server-builder /app/server/dist ./dist
 COPY --from=client-builder /app/client/dist ./public
 
-# 创建数据目录
-RUN mkdir -p /app/data && chown -R nodejs:nodejs /app
-
 # 设置数据目录环境变量
 ENV DATA_DIR=/app/data
-
-# 切换到非 root 用户
-USER nodejs
 
 # 暴露端口
 EXPOSE 3001
@@ -68,6 +58,10 @@ EXPOSE 3001
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
   CMD node -e "require('http').get('http://localhost:3001/api/items', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
-# 使用 dumb-init 启动应用
-ENTRYPOINT ["dumb-init", "--"]
+# 复制入口脚本
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# 使用入口脚本启动应用
+ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["node", "dist/index.js"]

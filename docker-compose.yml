@@ -7,7 +7,7 @@ services:
       - "3001:3001"
     volumes:
       # 持久化数据存储
-      - ./data:/app/data:rw
+      - ./data:/app/data
     environment:
       # 服务端口（默认 3001）
       - PORT=3001
