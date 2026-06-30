@@ -56,6 +56,7 @@
   }
 
   .searchInput {
+    flex: 1 0 100%;
     width: 100%;
     min-width: unset;
     font-size: 16px; /* 防止 iOS 缩放 */
