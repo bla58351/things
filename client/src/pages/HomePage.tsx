@@ -26,6 +26,7 @@ export default function HomePage() {
   const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // 批量选择相关状态
   const [selectionMode, setSelectionMode] = useState(false);
@@ -208,14 +209,49 @@ export default function HomePage() {
     }
   };
 
+  const closeSidebar = () => {
+    setSidebarOpen(false);
+  };
+
+  const handleLocationSelect = (id: string | null) => {
+    setSelectedLocationId(id);
+    closeSidebar();
+  };
+
+  const handleTagSelect = (value: string | null) => {
+    setTag(value);
+    closeSidebar();
+  };
+
+  const handleCategorySelect = (value: string | null) => {
+    setCategory(value);
+    closeSidebar();
+  };
+
   return (
     <div className={styles.page}>
-      <aside className={styles.sidebar}>
+      <button
+        className={styles.sidebarToggle}
+        onClick={() => setSidebarOpen(true)}
+        type="button"
+      >
+        ☰ 筛选与管理
+      </button>
+
+      {sidebarOpen && <div className={styles.sidebarOverlay} onClick={closeSidebar} />}
+
+      <aside className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarOpen : ''}`}>
+        <div className={styles.sidebarHeader}>
+          <span>筛选与管理</span>
+          <button className={styles.sidebarClose} onClick={closeSidebar} type="button">
+            ✕
+          </button>
+        </div>
         <div className={styles.sidebarSection}>
           <LocationTree
             locations={locations}
             selectedId={selectedLocationId}
-            onSelect={setSelectedLocationId}
+            onSelect={handleLocationSelect}
             title="位置管理"
             onRefresh={() => {
               fetchLocations();
@@ -227,7 +263,7 @@ export default function HomePage() {
           <TagManager
             tags={allTags}
             selectedTag={tag}
-            onSelect={setTag}
+            onSelect={handleTagSelect}
             onRefresh={fetchTags}
           />
         </div>
@@ -235,7 +271,7 @@ export default function HomePage() {
           <CategoryManager
             categories={allCategories}
             selectedCategory={category}
-            onSelect={setCategory}
+            onSelect={handleCategorySelect}
             onRefresh={fetchCategories}
           />
         </div>

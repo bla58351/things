@@ -12,6 +12,28 @@
   gap: 16px;
 }
 
+.sidebarHeader {
+  display: none;
+}
+
+.sidebarToggle {
+  display: none;
+}
+
+.sidebarOverlay {
+  display: none;
+}
+
+.sidebarClose {
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  padding: 4px;
+}
+
 /* 移动端适配 */
 @media (max-width: 768px) {
   .page {
@@ -19,9 +41,57 @@
     gap: 16px;
   }
 
+  .sidebarToggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    gap: 6px;
+    padding: 8px 14px;
+    background: #3b82f6;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .sidebarOverlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    z-index: 150;
+  }
+
   .sidebar {
-    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(84vw, 320px);
     gap: 12px;
+    padding: 16px;
+    background: #f5f7fa;
+    box-shadow: 8px 0 24px rgba(15, 23, 42, 0.18);
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+    z-index: 160;
+  }
+
+  .sidebarOpen {
+    transform: translateX(0);
+  }
+
+  .sidebarHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1f2937;
   }
 }
 
