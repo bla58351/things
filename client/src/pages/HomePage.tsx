@@ -316,6 +316,7 @@ export default function HomePage() {
           <SearchBar
             search={search}
             category={category}
+            categories={allCategories.map((item) => item.name)}
             tag={tag}
             onSearchChange={setSearch}
             onCategoryChange={setCategory}

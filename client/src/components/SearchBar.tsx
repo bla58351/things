@@ -1,23 +1,30 @@
 import { useEffect, useState } from 'react';
 import { Tag } from '../types';
-import { itemsApi, tagsApi } from '../api';
+import { tagsApi } from '../api';
 import styles from './SearchBar.module.css';
 
 interface Props {
   search: string;
   category: string | null;
+  categories: string[];
   tag: string | null;
   onSearchChange: (search: string) => void;
   onCategoryChange: (category: string | null) => void;
   onTagChange: (tag: string | null) => void;
 }
 
-export default function SearchBar({ search, category, tag, onSearchChange, onCategoryChange, onTagChange }: Props) {
-  const [categories, setCategories] = useState<string[]>([]);
+export default function SearchBar({
+  search,
+  category,
+  categories,
+  tag,
+  onSearchChange,
+  onCategoryChange,
+  onTagChange,
+}: Props) {
   const [tags, setTags] = useState<Tag[]>([]);
 
   useEffect(() => {
-    itemsApi.categories().then(setCategories).catch(() => {});
     tagsApi.list().then(setTags).catch(() => {});
   }, []);
 
