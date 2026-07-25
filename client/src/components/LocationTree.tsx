@@ -5,6 +5,7 @@ import { AlertDialog, ConfirmDialog } from './Dialog';
 import LocationQRCode from './LocationQRCode';
 import BatchQRCodePrint from './BatchQRCodePrint';
 import styles from './LocationTree.module.css';
+import panelStyles from './SidebarPanel.module.css';
 
 interface Props {
   locations: Location[];
@@ -68,9 +69,9 @@ function TreeNode({
   if (editingId === node.id) {
     return (
       <div className={styles.treeNode}>
-        <div className={styles.inlineForm} style={{ paddingLeft: depth * 4 }}>
+        <div className={panelStyles.form} style={{ paddingLeft: depth * 4 }}>
           <input
-            className={styles.inlineInput}
+            className={panelStyles.input}
             value={nameInput}
             onChange={(e) => onNameInput(e.target.value)}
             onKeyDown={(e) => {
@@ -79,10 +80,10 @@ function TreeNode({
             }}
             autoFocus
           />
-          <button className={styles.inlineConfirm} onClick={handleRename}>
+          <button className={panelStyles.confirmButton} onClick={handleRename}>
             ✓
           </button>
-          <button className={styles.inlineCancel} onClick={onCancelEdit}>
+          <button className={panelStyles.cancelButton} onClick={onCancelEdit}>
             ✕
           </button>
         </div>
@@ -93,46 +94,56 @@ function TreeNode({
   return (
     <div className={styles.treeNode}>
       <div
-        className={`${styles.nodeLabel} ${selectedId === node.id ? styles.nodeLabelActive : ''}`}
+        className={`${panelStyles.item} ${selectedId === node.id ? panelStyles.itemActive : ''}`}
         style={{ paddingLeft: depth * 4 + 4 }}
+        onClick={() => onSelect(selectedId === node.id ? null : node.id)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.target !== e.currentTarget) return;
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onSelect(selectedId === node.id ? null : node.id);
+          }
+        }}
       >
         {hasChildren ? (
-          <button className={styles.nodeToggle} onClick={() => setExpanded(!expanded)}>
+          <button className={styles.nodeToggle} onClick={(e) => { e.stopPropagation(); setExpanded(!expanded); }}>
             {expanded ? '▼' : '▶'}
           </button>
         ) : (
           <span className={styles.nodeToggle} style={{ visibility: 'hidden' }} />
         )}
-        <span className={styles.nodeName} onClick={() => onSelect(selectedId === node.id ? null : node.id)}>
+        <span className={styles.nodeName}>
           <span className={styles.nodeDot} style={{ background: node.color || '#6b7280' }} />
           {node.name}
         </span>
-        <span className={styles.nodeActions}>
+        <span className={panelStyles.itemActions}>
           <button
-            className={styles.nodeActionBtn}
+            className={panelStyles.actionButton}
             title="添加子位置"
-            onClick={() => onStartAdd(node.id)}
+            onClick={(e) => { e.stopPropagation(); onStartAdd(node.id); }}
           >
             +
           </button>
           <button
-            className={styles.nodeActionBtn}
+            className={panelStyles.actionButton}
             title="重命名"
-            onClick={() => onStartEdit(node.id, node.name)}
+            onClick={(e) => { e.stopPropagation(); onStartEdit(node.id, node.name); }}
           >
             ✎
           </button>
           <button
-            className={styles.nodeActionBtn}
+            className={panelStyles.actionButton}
             title="二维码"
-            onClick={() => onShowQRCode(node.id, node.name)}
+            onClick={(e) => { e.stopPropagation(); onShowQRCode(node.id, node.name); }}
           >
             📱
           </button>
           <button
-            className={styles.nodeActionBtn}
+            className={panelStyles.actionButton}
             title="删除"
-            onClick={() => handleDelete(node.id, node.name)}
+            onClick={(e) => { e.stopPropagation(); handleDelete(node.id, node.name); }}
           >
             ✕
           </button>
@@ -183,9 +194,9 @@ function AddInlineForm({
   onCancelEdit: () => void;
 }) {
   return (
-    <div className={styles.inlineForm} style={{ paddingLeft: depth * 14 }}>
+    <div className={panelStyles.form} style={{ paddingLeft: depth * 14 }}>
       <input
-        className={styles.inlineInput}
+        className={panelStyles.input}
         value={nameInput}
         onChange={(e) => onNameInput(e.target.value)}
         onKeyDown={(e) => {
@@ -195,10 +206,10 @@ function AddInlineForm({
         placeholder={parentId ? '子位置名称' : '顶层位置名称'}
         autoFocus
       />
-      <button className={styles.inlineConfirm} onClick={onConfirmAdd}>
+      <button className={panelStyles.confirmButton} onClick={onConfirmAdd}>
         ✓
       </button>
-      <button className={styles.inlineCancel} onClick={onCancelEdit}>
+      <button className={panelStyles.cancelButton} onClick={onCancelEdit}>
         ✕
       </button>
     </div>
@@ -335,9 +346,9 @@ export default function LocationTree({ locations, selectedId, onSelect, onRefres
     }
   };
 
-  if (locations.length === 0) {
+  if (locations.length === 0 && !title) {
     return (
-      <div className={styles.tree}>
+      <div className={panelStyles.panel}>
         <div className={styles.noData}>暂无位置</div>
         {isAddingTopLevel ? (
           <AddInlineForm
@@ -358,21 +369,48 @@ export default function LocationTree({ locations, selectedId, onSelect, onRefres
   }
 
   return (
-    <div className={styles.tree}>
+    <div className={panelStyles.panel}>
       {title && (
-        <div className={styles.sidebarTitle}>
-          {title}
+        <div className={panelStyles.header}>
+          <span className={panelStyles.title}>{title}</span>
+          <div className={panelStyles.headerActions}>
           {locations.length > 0 && (
             <button
-              className={styles.batchPrintBtn}
+              className={panelStyles.iconButton}
               onClick={() => setShowBatchPrint(true)}
               title="批量打印二维码"
             >
               🖨️
             </button>
           )}
+          {!isAddingTopLevel && (
+            <button
+              className={panelStyles.iconButton}
+              onClick={() => handleStartAdd(null)}
+              title={'\u6dfb\u52a0\u9876\u5c42\u4f4d\u7f6e'}
+            >
+              +
+            </button>
+          )}
+          </div>
         </div>
       )}
+      <div className={panelStyles.list}>
+        <div
+          className={`${panelStyles.item} ${selectedId === null ? panelStyles.itemActive : ''}`}
+          onClick={() => onSelect(null)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onSelect(null);
+            }
+          }}
+        >
+          <span>{'\u5168\u90e8\u4f4d\u7f6e'}</span>
+        </div>
+      {locations.length === 0 && <div className={panelStyles.empty}>{'\u6682\u65e0\u4f4d\u7f6e'}</div>}
       {locations.map((node) => (
         <TreeNode
           key={node.id}
@@ -413,11 +451,12 @@ export default function LocationTree({ locations, selectedId, onSelect, onRefres
           onCancelEdit={handleCancelEdit}
         />
       )}
-      {!isAddingTopLevel && addingParentId === null && (
+      {!title && !isAddingTopLevel && addingParentId === null && (
         <button className={styles.addRootBtn} onClick={() => handleStartAdd(null)}>
           + 添加顶层位置
         </button>
       )}
+      </div>
       {alertMessage && (
         <AlertDialog message={alertMessage} onClose={() => setAlertMessage(null)} />
       )}

@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Tag } from '../types';
 import { tagsApi } from '../api';
 import { AlertDialog, ConfirmDialog } from './Dialog';
-import layoutStyles from './Layout.module.css';
 import styles from './TagManager.module.css';
+import panelStyles from './SidebarPanel.module.css';
 
 interface Props {
   tags: Tag[];
@@ -19,6 +19,13 @@ export default function TagManager({ tags, selectedTag, onSelect, onRefresh }: P
   const [editName, setEditName] = useState('');
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<Tag | null>(null);
+
+  useEffect(() => {
+    if (isAdding) {
+      setEditingTag(null);
+      setEditName('');
+    }
+  }, [isAdding]);
 
   const handleAdd = async () => {
     const name = newTagName.trim();
@@ -44,6 +51,7 @@ export default function TagManager({ tags, selectedTag, onSelect, onRefresh }: P
     }
     try {
       await tagsApi.update(editingTag.id, name);
+      if (selectedTag === editingTag.name) onSelect(name);
       setEditingTag(null);
       onRefresh();
     } catch (e) {
@@ -64,8 +72,8 @@ export default function TagManager({ tags, selectedTag, onSelect, onRefresh }: P
   };
 
   return (
-    <div className={styles.tagManager}>
-      <div className={styles.header}>
+    <div className={panelStyles.panel}>
+      <div className={panelStyles.header}>
         <span className={styles.title}>标签管理</span>
         {!isAdding && (
           <button className={styles.addBtn} onClick={() => setIsAdding(true)} title="添加标签">
@@ -75,9 +83,9 @@ export default function TagManager({ tags, selectedTag, onSelect, onRefresh }: P
       </div>
 
       {isAdding && (
-        <div className={styles.addForm}>
+        <div className={panelStyles.form}>
           <input
-            className={styles.input}
+            className={panelStyles.input}
             value={newTagName}
             onChange={(e) => setNewTagName(e.target.value)}
             onKeyDown={(e) => {
@@ -92,23 +100,41 @@ export default function TagManager({ tags, selectedTag, onSelect, onRefresh }: P
         </div>
       )}
 
-      <div className={styles.tagList}>
+      <div className={panelStyles.list}>
         <div
-          className={`${styles.tagItem} ${selectedTag === null ? styles.tagItemActive : ''}`}
+          className={`${panelStyles.item} ${selectedTag === null ? panelStyles.itemActive : ''}`}
           onClick={() => onSelect(null)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.target !== e.currentTarget) return;
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onSelect(null);
+            }
+          }}
         >
           <span>全部</span>
         </div>
         {tags.map((tag) => (
           <div
             key={tag.id}
-            className={`${styles.tagItem} ${selectedTag === tag.name ? styles.tagItemActive : ''}`}
-            onClick={() => onSelect(tag.name)}
+            className={`${panelStyles.item} ${selectedTag === tag.name ? panelStyles.itemActive : ''}`}
+            onClick={() => onSelect(selectedTag === tag.name ? null : tag.name)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.target !== e.currentTarget) return;
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onSelect(selectedTag === tag.name ? null : tag.name);
+              }
+            }}
           >
             {editingTag?.id === tag.id ? (
-              <div className={styles.editForm}>
+              <div className={panelStyles.form} onClick={(e) => e.stopPropagation()}>
                 <input
-                  className={styles.input}
+                  className={panelStyles.input}
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
                   onKeyDown={(e) => {
@@ -124,16 +150,16 @@ export default function TagManager({ tags, selectedTag, onSelect, onRefresh }: P
               <>
                 <span className={styles.tagDot} style={{ background: tag.color }} />
                 <span className={styles.tagName}>{tag.name}</span>
-                <div className={styles.tagActions}>
+                <div className={panelStyles.itemActions}>
                   <button
-                    className={styles.tagActionBtn}
-                    onClick={(e) => { e.stopPropagation(); setEditingTag(tag); setEditName(tag.name); }}
+                    className={panelStyles.actionButton}
+                    onClick={(e) => { e.stopPropagation(); setEditingTag(tag); setEditName(tag.name); setIsAdding(false); setNewTagName(''); }}
                     title="编辑"
                   >
                     ✎
                   </button>
                   <button
-                    className={styles.tagActionBtn}
+                    className={panelStyles.actionButton}
                     onClick={(e) => { e.stopPropagation(); setConfirmDelete(tag); }}
                     title="删除"
                   >

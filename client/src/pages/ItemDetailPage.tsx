@@ -2,9 +2,10 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Item, Location, MoveRecord, Tag } from '../types';
 import { itemsApi, locationsApi, tagsApi } from '../api';
-import ItemForm from '../components/ItemForm';
+import ItemForm, { ItemFormData } from '../components/ItemForm';
 import MoveHistory from '../components/MoveHistory';
 import { AlertDialog, ConfirmDialog } from '../components/Dialog';
+import { formatOptionalDate, getExpiryInfo } from '../utils/expiry';
 import layoutStyles from '../components/Layout.module.css';
 import styles from './ItemDetailPage.module.css';
 
@@ -48,14 +49,7 @@ export default function ItemDetailPage() {
     fetchTags();
   }, [fetchItem, fetchLocations, fetchRecords, fetchTags]);
 
-  const handleUpdate = async (data: {
-    name: string;
-    category: string;
-    tags: string[];
-    locationId: string;
-    quantity: number;
-    description: string;
-  }) => {
+  const handleUpdate = async (data: ItemFormData) => {
     if (!id) return;
     try {
       await itemsApi.update(id, data);
@@ -105,6 +99,11 @@ export default function ItemDetailPage() {
     }
     return result;
   };
+
+  const expiryInfo = getExpiryInfo(item?.expirationDate, item?.expiryReminderDays);
+  const hasDateInfo = Boolean(
+    item?.purchaseDate || item?.productionDate || item?.expirationDate,
+  );
 
   if (!item) return null;
 
@@ -184,6 +183,45 @@ export default function ItemDetailPage() {
               <div className={styles.description}>{item.description}</div>
             )}
           </div>
+
+          {hasDateInfo && (
+            <div className={styles.card}>
+              <div className={styles.cardTitle}>日期与保质期</div>
+              <div className={styles.infoGrid}>
+                {item.purchaseDate && (
+                  <div className={styles.infoItem}>
+                    <span className={styles.infoLabel}>购入日期</span>
+                    <span className={styles.infoValue}>{formatOptionalDate(item.purchaseDate)}</span>
+                  </div>
+                )}
+                {item.productionDate && (
+                  <div className={styles.infoItem}>
+                    <span className={styles.infoLabel}>生产日期</span>
+                    <span className={styles.infoValue}>{formatOptionalDate(item.productionDate)}</span>
+                  </div>
+                )}
+                {item.expirationDate && (
+                  <div className={styles.infoItem}>
+                    <span className={styles.infoLabel}>到期日期</span>
+                    <span className={styles.infoValue}>{formatOptionalDate(item.expirationDate)}</span>
+                  </div>
+                )}
+                {item.expirationDate && (
+                  <div className={styles.infoItem}>
+                    <span className={styles.infoLabel}>提前提醒</span>
+                    <span className={styles.infoValue}>{item.expiryReminderDays ?? 7} 天</span>
+                  </div>
+                )}
+              </div>
+              {expiryInfo && (
+                <div className={`${styles.expiryStatus} ${styles[`expiryStatus_${expiryInfo.status}`]}`}>
+                  <span className={styles.expiryStatusDot} />
+                  <strong>{expiryInfo.label}</strong>
+                  <span>{expiryInfo.detail}</span>
+                </div>
+              )}
+            </div>
+          )}
 
           <div className={styles.card}>
             <div className={styles.cardTitle}>位置变更</div>

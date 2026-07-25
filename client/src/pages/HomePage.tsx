@@ -6,7 +6,7 @@ import TagManager from '../components/TagManager';
 import CategoryManager from '../components/CategoryManager';
 import SearchBar from '../components/SearchBar';
 import ItemCard from '../components/ItemCard';
-import ItemForm from '../components/ItemForm';
+import ItemForm, { ItemFormData } from '../components/ItemForm';
 import BatchActions from '../components/BatchActions';
 import BatchMoveModal from '../components/BatchMoveModal';
 import BatchTagsModal from '../components/BatchTagsModal';
@@ -77,14 +77,7 @@ export default function HomePage() {
     }
   }, []);
 
-  const handleAddItem = async (data: {
-    name: string;
-    category: string;
-    tags: string[];
-    locationId: string;
-    quantity: number;
-    description: string;
-  }) => {
+  const handleAddItem = async (data: ItemFormData) => {
     try {
       await itemsApi.create(data);
       setShowAddModal(false);

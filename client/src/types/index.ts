@@ -7,6 +7,10 @@ export interface Item {
   quantity: number;
   description: string;
   photoUrl?: string;
+  purchaseDate?: string;
+  productionDate?: string;
+  expirationDate?: string;
+  expiryReminderDays?: number;
   createdAt: string;
   updatedAt: string;
   locationPath?: string[];

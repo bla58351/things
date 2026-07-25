@@ -6,16 +6,22 @@ import { AlertDialog } from './Dialog';
 import layoutStyles from './Layout.module.css';
 import styles from './ItemForm.module.css';
 
+export interface ItemFormData {
+  name: string;
+  category: string;
+  tags: string[];
+  locationId: string;
+  quantity: number;
+  description: string;
+  purchaseDate?: string;
+  productionDate?: string;
+  expirationDate?: string;
+  expiryReminderDays?: number;
+}
+
 interface Props {
   item?: Item;
-  onSubmit: (data: {
-    name: string;
-    category: string;
-    tags: string[];
-    locationId: string;
-    quantity: number;
-    description: string;
-  }) => void;
+  onSubmit: (data: ItemFormData) => void;
   onCancel: () => void;
 }
 
@@ -37,6 +43,13 @@ export default function ItemForm({ item, onSubmit, onCancel }: Props) {
   const [locationId, setLocationId] = useState(item?.locationId || '');
   const [quantity, setQuantity] = useState(item?.quantity || 1);
   const [description, setDescription] = useState(item?.description || '');
+  const [purchaseDate, setPurchaseDate] = useState(item?.purchaseDate || '');
+  const [productionDate, setProductionDate] = useState(item?.productionDate || '');
+  const [expirationDate, setExpirationDate] = useState(item?.expirationDate || '');
+  const [expiryReminderDays, setExpiryReminderDays] = useState(item?.expiryReminderDays ?? 7);
+  const [showDateOptions, setShowDateOptions] = useState(
+    Boolean(item?.purchaseDate || item?.productionDate || item?.expirationDate),
+  );
   const [locations, setLocations] = useState<Location[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [showLocationPicker, setShowLocationPicker] = useState(false);
@@ -75,6 +88,14 @@ export default function ItemForm({ item, onSubmit, onCancel }: Props) {
       setAlertMessage('请选择位置');
       return;
     }
+    if (productionDate && expirationDate && productionDate > expirationDate) {
+      setAlertMessage('到期日期不能早于生产日期');
+      return;
+    }
+    if (!Number.isInteger(expiryReminderDays) || expiryReminderDays < 0 || expiryReminderDays > 3650) {
+      setAlertMessage('提前提醒天数必须是 0 到 3650 之间的整数');
+      return;
+    }
     onSubmit({
       name: name.trim(),
       category: category.trim(),
@@ -82,6 +103,10 @@ export default function ItemForm({ item, onSubmit, onCancel }: Props) {
       locationId,
       quantity,
       description: description.trim(),
+      purchaseDate,
+      productionDate,
+      expirationDate,
+      expiryReminderDays: expirationDate ? expiryReminderDays : undefined,
     });
   };
 
@@ -139,8 +164,85 @@ export default function ItemForm({ item, onSubmit, onCancel }: Props) {
             className={styles.locationPicker}
             onClick={() => setShowLocationPicker(true)}
           >
-            {locationId ? `📍 ${getLocationLabel()}` : '📌 点击选择位置...'}
+            <span
+              className={styles.locationDot}
+              style={{ background: selectedLocation?.location.color || '#94a3b8' }}
+            />
+            <span>{locationId ? getLocationLabel() : '点击选择位置...'}</span>
           </button>
+        </div>
+
+        <div className={styles.optionalSection}>
+          <button
+            type="button"
+            className={styles.optionalToggle}
+            onClick={() => setShowDateOptions((value) => !value)}
+            aria-expanded={showDateOptions}
+          >
+            <span>
+              <strong>日期与保质期</strong>
+              <small>选填 · 用于记录购入、生产和到期时间</small>
+            </span>
+            <span className={styles.optionalToggleIcon}>{showDateOptions ? '−' : '+'}</span>
+          </button>
+
+          {showDateOptions && (
+            <div className={styles.optionalContent}>
+              <div className={styles.formRow}>
+                <div className={styles.field}>
+                  <label className={styles.label}>购入日期</label>
+                  <input
+                    className={styles.input}
+                    type="date"
+                    value={purchaseDate}
+                    onChange={(e) => setPurchaseDate(e.target.value)}
+                  />
+                </div>
+                <div className={styles.field}>
+                  <label className={styles.label}>生产日期</label>
+                  <input
+                    className={styles.input}
+                    type="date"
+                    value={productionDate}
+                    max={expirationDate || undefined}
+                    onChange={(e) => setProductionDate(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className={styles.formRow}>
+                <div className={styles.field}>
+                  <label className={styles.label}>到期日期</label>
+                  <input
+                    className={styles.input}
+                    type="date"
+                    value={expirationDate}
+                    min={productionDate || undefined}
+                    onChange={(e) => setExpirationDate(e.target.value)}
+                  />
+                </div>
+                <div className={styles.field}>
+                  <label className={styles.label}>提前提醒</label>
+                  <div className={styles.reminderInput}>
+                    <input
+                      className={styles.input}
+                      type="number"
+                      min={0}
+                      max={3650}
+                      step={1}
+                      value={expiryReminderDays}
+                      disabled={!expirationDate}
+                      onChange={(e) => setExpiryReminderDays(Number(e.target.value))}
+                    />
+                    <span>天</span>
+                  </div>
+                </div>
+              </div>
+              <p className={styles.optionalHint}>
+                到期日期留空时不会显示提醒；默认提前 7 天标记为即将到期。
+              </p>
+            </div>
+          )}
         </div>
 
         <div className={styles.field}>
@@ -183,7 +285,11 @@ export default function ItemForm({ item, onSubmit, onCancel }: Props) {
                       setShowLocationPicker(false);
                     }}
                   >
-                    📍 {location.name}
+                    <span
+                      className={styles.locationDot}
+                      style={{ background: location.color || '#6b7280' }}
+                    />
+                    <span>{location.name}</span>
                   </div>
                 ))
               )}

@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Item, Tag } from '../types';
+import { getExpiryInfo } from '../utils/expiry';
 import styles from './ItemCard.module.css';
 
 interface Props {
@@ -12,6 +13,14 @@ interface Props {
 
 export default function ItemCard({ item, allTags, selectionMode, isSelected, onToggleSelect }: Props) {
   const navigate = useNavigate();
+  const expiryInfo = getExpiryInfo(item.expirationDate, item.expiryReminderDays);
+  const expiryClass = expiryInfo
+    ? {
+        safe: styles.expirySafe,
+        warning: styles.expiryWarning,
+        expired: styles.expiryExpired,
+      }[expiryInfo.status]
+    : '';
 
   const getTagColor = (name: string) => {
     return allTags.find((t) => t.name === name)?.color || '#6b7280';
@@ -63,6 +72,13 @@ export default function ItemCard({ item, allTags, selectionMode, isSelected, onT
       )}
       {item.quantity > 1 && (
         <div className={styles.cardQuantity}>数量: {item.quantity}</div>
+      )}
+      {expiryInfo && (
+        <div className={`${styles.cardExpiry} ${expiryClass}`}>
+          <span className={styles.expiryDot} />
+          <span>{expiryInfo.label}</span>
+          <span className={styles.expiryDetail}>{expiryInfo.detail}</span>
+        </div>
       )}
     </div>
   );

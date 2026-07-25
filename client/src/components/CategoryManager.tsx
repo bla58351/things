@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AlertDialog, ConfirmDialog } from './Dialog';
 import { categoriesApi, Category } from '../api';
 import styles from './CategoryManager.module.css';
+import panelStyles from './SidebarPanel.module.css';
 
 interface Props {
   categories: Category[];
@@ -17,6 +18,13 @@ export default function CategoryManager({ categories, selectedCategory, onSelect
   const [editName, setEditName] = useState('');
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<Category | null>(null);
+
+  useEffect(() => {
+    if (isAdding) {
+      setEditingCategory(null);
+      setEditName('');
+    }
+  }, [isAdding]);
 
   const handleAdd = async () => {
     const name = newCategoryName.trim();
@@ -76,8 +84,8 @@ export default function CategoryManager({ categories, selectedCategory, onSelect
   };
 
   return (
-    <div className={styles.categoryManager}>
-      <div className={styles.header}>
+    <div className={panelStyles.panel}>
+      <div className={panelStyles.header}>
         <span className={styles.title}>分类管理</span>
         {!isAdding && (
           <button className={styles.addBtn} onClick={() => setIsAdding(true)} title="添加分类">
@@ -87,9 +95,9 @@ export default function CategoryManager({ categories, selectedCategory, onSelect
       </div>
 
       {isAdding && (
-        <div className={styles.addForm}>
+        <div className={panelStyles.form}>
           <input
-            className={styles.input}
+            className={panelStyles.input}
             value={newCategoryName}
             onChange={(e) => setNewCategoryName(e.target.value)}
             onKeyDown={(e) => {
@@ -104,23 +112,41 @@ export default function CategoryManager({ categories, selectedCategory, onSelect
         </div>
       )}
 
-      <div className={styles.categoryList}>
+      <div className={panelStyles.list}>
         <div
-          className={`${styles.categoryItem} ${selectedCategory === null ? styles.categoryItemActive : ''}`}
+          className={`${panelStyles.item} ${selectedCategory === null ? panelStyles.itemActive : ''}`}
           onClick={() => onSelect(null)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.target !== e.currentTarget) return;
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onSelect(null);
+            }
+          }}
         >
           <span>全部</span>
         </div>
         {categories.map((cat) => (
           <div
             key={cat.id}
-            className={`${styles.categoryItem} ${selectedCategory === cat.name ? styles.categoryItemActive : ''}`}
-            onClick={() => onSelect(cat.name)}
+            className={`${panelStyles.item} ${selectedCategory === cat.name ? panelStyles.itemActive : ''}`}
+            onClick={() => onSelect(selectedCategory === cat.name ? null : cat.name)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.target !== e.currentTarget) return;
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onSelect(selectedCategory === cat.name ? null : cat.name);
+              }
+            }}
           >
             {editingCategory?.id === cat.id ? (
-              <div className={styles.editForm}>
+              <div className={panelStyles.form} onClick={(e) => e.stopPropagation()}>
                 <input
-                  className={styles.input}
+                  className={panelStyles.input}
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
                   onKeyDown={(e) => {
@@ -135,16 +161,16 @@ export default function CategoryManager({ categories, selectedCategory, onSelect
             ) : (
               <>
                 <span className={styles.categoryName}>{cat.name}</span>
-                <div className={styles.categoryActions}>
+                <div className={panelStyles.itemActions}>
                   <button
-                    className={styles.categoryActionBtn}
-                    onClick={(e) => { e.stopPropagation(); setEditingCategory(cat); setEditName(cat.name); }}
+                    className={panelStyles.actionButton}
+                    onClick={(e) => { e.stopPropagation(); setEditingCategory(cat); setEditName(cat.name); setIsAdding(false); setNewCategoryName(''); }}
                     title="编辑"
                   >
                     ✎
                   </button>
                   <button
-                    className={styles.categoryActionBtn}
+                    className={panelStyles.actionButton}
                     onClick={(e) => { e.stopPropagation(); setConfirmDelete(cat); }}
                     title="删除"
                   >

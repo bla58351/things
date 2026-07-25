@@ -21,6 +21,21 @@ function toPinyin(text: string): string {
   return pinyin(text, { toneType: 'none', separator: '' }).toLowerCase();
 }
 
+function isValidOptionalDate(value: unknown): boolean {
+  if (value === undefined || value === null || value === '') return true;
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const [year, month, day] = value.split('-').map(Number);
+  const date = new Date(year, month - 1, day);
+  return date.getFullYear() === year
+    && date.getMonth() === month - 1
+    && date.getDate() === day;
+}
+
+function isValidReminderDays(value: unknown): boolean {
+  if (value === undefined || value === null || value === '') return true;
+  return Number.isInteger(value) && Number(value) >= 0 && Number(value) <= 3650;
+}
+
 const router = Router();
 
 router.get('/', (req: Request, res: Response) => {
@@ -108,13 +123,34 @@ router.get('/:id', (req: Request, res: Response) => {
 });
 
 router.post('/', (req: Request, res: Response) => {
-  const { name, category, tags, locationId, quantity, description, photoUrl } = req.body;
+  const {
+    name,
+    category,
+    tags,
+    locationId,
+    quantity,
+    description,
+    photoUrl,
+    purchaseDate,
+    productionDate,
+    expirationDate,
+    expiryReminderDays,
+  } = req.body;
 
   if (!name) {
     return res.status(400).json({ error: '物品名称不能为空' });
   }
   if (!locationId) {
     return res.status(400).json({ error: '请选择物品所在位置' });
+  }
+  if (![purchaseDate, productionDate, expirationDate].every(isValidOptionalDate)) {
+    return res.status(400).json({ error: '日期格式无效' });
+  }
+  if (!isValidReminderDays(expiryReminderDays)) {
+    return res.status(400).json({ error: '提前提醒天数必须是 0 到 3650 之间的整数' });
+  }
+  if (productionDate && expirationDate && productionDate > expirationDate) {
+    return res.status(400).json({ error: '到期日期不能早于生产日期' });
   }
 
   const now = new Date().toISOString();
@@ -127,6 +163,10 @@ router.post('/', (req: Request, res: Response) => {
     quantity: quantity || 1,
     description: description || '',
     photoUrl: photoUrl || undefined,
+    purchaseDate: purchaseDate || undefined,
+    productionDate: productionDate || undefined,
+    expirationDate: expirationDate || undefined,
+    expiryReminderDays: expirationDate ? (expiryReminderDays ?? 7) : undefined,
     createdAt: now,
     updatedAt: now,
   });
@@ -144,8 +184,33 @@ router.put('/:id', (req: Request, res: Response) => {
     return res.status(404).json({ error: '物品不存在' });
   }
 
-  const { name, category, tags, locationId, quantity, description, photoUrl } = req.body;
+  const {
+    name,
+    category,
+    tags,
+    locationId,
+    quantity,
+    description,
+    photoUrl,
+    purchaseDate,
+    productionDate,
+    expirationDate,
+    expiryReminderDays,
+  } = req.body;
   const updates: Record<string, unknown> = {};
+
+  if (![purchaseDate, productionDate, expirationDate].every(isValidOptionalDate)) {
+    return res.status(400).json({ error: '日期格式无效' });
+  }
+  if (!isValidReminderDays(expiryReminderDays)) {
+    return res.status(400).json({ error: '提前提醒天数必须是 0 到 3650 之间的整数' });
+  }
+
+  const nextProductionDate = productionDate !== undefined ? productionDate : item.productionDate;
+  const nextExpirationDate = expirationDate !== undefined ? expirationDate : item.expirationDate;
+  if (nextProductionDate && nextExpirationDate && nextProductionDate > nextExpirationDate) {
+    return res.status(400).json({ error: '到期日期不能早于生产日期' });
+  }
 
   if (name !== undefined) updates.name = name;
   if (category !== undefined) updates.category = category;
@@ -153,6 +218,16 @@ router.put('/:id', (req: Request, res: Response) => {
   if (quantity !== undefined) updates.quantity = quantity;
   if (description !== undefined) updates.description = description;
   if (photoUrl !== undefined) updates.photoUrl = photoUrl;
+  if (purchaseDate !== undefined) updates.purchaseDate = purchaseDate || undefined;
+  if (productionDate !== undefined) updates.productionDate = productionDate || undefined;
+  if (expirationDate !== undefined) updates.expirationDate = expirationDate || undefined;
+  if (expiryReminderDays !== undefined) {
+    updates.expiryReminderDays = nextExpirationDate && expiryReminderDays !== null && expiryReminderDays !== ''
+      ? expiryReminderDays
+      : undefined;
+  } else if (expirationDate !== undefined && !expirationDate) {
+    updates.expiryReminderDays = undefined;
+  }
 
   if (locationId !== undefined && locationId !== item.locationId) {
     createMoveRecord({

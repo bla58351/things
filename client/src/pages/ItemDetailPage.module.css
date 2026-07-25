@@ -100,6 +100,43 @@
   line-height: 1.7;
 }
 
+.expiryStatus {
+  width: fit-content;
+  margin-top: 18px;
+  padding: 8px 11px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+}
+
+.expiryStatus strong {
+  font-size: 13px;
+}
+
+.expiryStatusDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.expiryStatus_safe {
+  color: #047857;
+  background: #ecfdf5;
+}
+
+.expiryStatus_warning {
+  color: #b45309;
+  background: #fffbeb;
+}
+
+.expiryStatus_expired {
+  color: #b91c1c;
+  background: #fef2f2;
+}
+
 .actions {
   display: flex;
   gap: 8px;

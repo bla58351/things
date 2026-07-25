@@ -186,3 +186,56 @@
   color: #9ca3af;
   font-size: 13px;
 }
+/* Shared sidebar controls */
+.title {
+  color: #4b5563;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+.addBtn,
+.confirmBtn,
+.cancelBtn {
+  width: 26px;
+  height: 26px;
+  flex: 0 0 26px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.addBtn,
+.cancelBtn {
+  color: #64748b;
+  background: #f1f5f9;
+}
+
+.addBtn:hover,
+.cancelBtn:hover {
+  color: #1f2937;
+  background: #e2e8f0;
+}
+
+.confirmBtn {
+  color: #fff;
+  background: #3b82f6;
+}
+
+.confirmBtn:hover {
+  background: #2563eb;
+}
+
+.empty {
+  padding: 18px 8px;
+  color: #9ca3af;
+  font-size: 13px;
+  text-align: center;
+}

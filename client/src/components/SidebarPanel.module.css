@@ -1,0 +1,198 @@
+.panel {
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.035);
+}
+
+.header {
+  min-height: 28px;
+  padding: 0 2px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.title {
+  min-width: 0;
+  color: #4b5563;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.headerActions,
+.itemActions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.iconButton,
+.actionButton,
+.confirmButton,
+.cancelButton {
+  width: 26px;
+  height: 26px;
+  flex: 0 0 26px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+  transition: color 0.15s, background 0.15s, box-shadow 0.15s;
+}
+
+.iconButton,
+.actionButton,
+.cancelButton {
+  color: #64748b;
+  background: #f1f5f9;
+}
+
+.iconButton:hover,
+.actionButton:hover,
+.cancelButton:hover {
+  color: #1f2937;
+  background: #e2e8f0;
+}
+
+.list {
+  max-height: 280px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  scrollbar-gutter: stable;
+}
+
+.item {
+  width: 100%;
+  min-height: 36px;
+  padding: 7px 8px;
+  border-radius: 7px;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  user-select: none;
+  transition: color 0.15s, background 0.15s;
+}
+
+.item:hover {
+  background: #f3f4f6;
+}
+
+.item:focus-visible {
+  outline: 2px solid rgba(59, 130, 246, 0.45);
+  outline-offset: -2px;
+}
+
+.itemActive,
+.itemActive:hover {
+  color: #1d4ed8;
+  background: #eff6ff;
+  font-weight: 500;
+}
+
+.itemActions {
+  margin-left: auto;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+
+.item:hover .itemActions,
+.item:focus-within .itemActions {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.actionButton {
+  width: 24px;
+  height: 24px;
+  flex-basis: 24px;
+  background: transparent;
+  color: #94a3b8;
+}
+
+.form {
+  width: 100%;
+  padding: 2px 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.input {
+  min-width: 0;
+  height: 30px;
+  flex: 1;
+  padding: 4px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  color: #374151;
+  background: #fff;
+  font-size: 13px;
+  outline: none;
+}
+
+.input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.13);
+}
+
+.confirmButton {
+  color: #fff;
+  background: #3b82f6;
+}
+
+.confirmButton:hover {
+  background: #2563eb;
+}
+
+.empty {
+  padding: 18px 8px;
+  color: #9ca3af;
+  font-size: 13px;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .panel {
+    border-radius: 9px;
+  }
+
+  .list {
+    max-height: 300px;
+  }
+
+  .item {
+    min-height: 40px;
+    padding: 8px;
+  }
+
+  .itemActions {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .actionButton {
+    width: 28px;
+    height: 28px;
+    flex-basis: 28px;
+  }
+}
